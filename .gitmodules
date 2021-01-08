@@ -1,0 +1,6 @@
+[submodule "lib/canSerializer"]
+	path = lib/canSerializer
+	url = https://github.com/zainahm3d/canSerializer
+[submodule "lib/BR-CAN-IDs"]
+	path = lib/BR-CAN-IDs
+	url = https://github.com/broncoracing/BR-CAN-IDs

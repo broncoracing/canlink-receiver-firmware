@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "CANLink Debug",
+				"cwd": "${workspaceRoot}",
+				"executable": "BUILD/NUCLEO_F303RE/GCC_ARM-DEBUG/CanLink_TX.elf",
+				"request": "launch",
+				"type": "cortex-debug",
+				"servertype": "jlink",
+				"svdFile": "STM32F303.svd",
+				"device": "STM32F303RE",
+				"interface": "swd",
+				"demangle": true,
+				"runToMain": true,
+				"preLaunchCommands": ["set backtrace limit 6"],
+			}
+		]
+	}
+}
