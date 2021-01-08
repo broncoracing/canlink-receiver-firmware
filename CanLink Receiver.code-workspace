@@ -4,7 +4,13 @@
 			"path": "."
 		}
 	],
-	"settings": {},
+	"settings": {
+		"files.associations": {
+			"istream": "cpp",
+			"*.tcc": "cpp",
+			"ostream": "cpp"
+		}
+	},
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [

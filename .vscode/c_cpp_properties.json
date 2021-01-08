@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/",
+                "${workspaceFolder}/mbed-os",
+                "${workspaceFolder}/mbed-os/platform/include",
+                "${workspaceFolder}/lib/canSerializer/src"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/local/bin/gcc-10",
+            "cStandard": "c17"
+        }
+    ],
+    "version": 4
+}
