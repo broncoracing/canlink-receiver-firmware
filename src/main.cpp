@@ -8,12 +8,13 @@
 #include <queue>
 
 // External variables
-extern CAN can;                 
+extern CAN can;
 extern UnbufferedSerial xbee;
 extern DigitalOut led;
 
 // All outgoing CAN frames go here
 CANMessage outmsg;
+CANMessage inmsg;
 
 char xbeeBuf = 0;       // UART bytes go here
 queue<char> xbeeQueue;
@@ -26,7 +27,7 @@ void buildFrame(CANFrame *tempFrame);
 uint8_t frameBuf[sizeof(CANFrame)] = {0};
 
 bool gotByte = false;
-Timer timer; 
+Timer timer;
 
 int main()
 {
@@ -36,6 +37,13 @@ int main()
 
     while (1)
     {
+        can.read(inmsg);                                                    // throw away any incoming CAN frames
+
+        if (xbeeQueue.size() >= 512)                                        // if we fall this far behind there is an issue
+        {
+            xbeeQueue = {};                                                 // wipe the buffer and attempt to recover
+        }
+
         if (xbeeQueue.size() >= sizeof(CANFrame) * 2)                       // make sure we have enough data to build a packet
         {
             CANFrame tempFrame = {0};                                       // empty trial frame
@@ -67,7 +75,7 @@ void xbeeISR()
 {
     if (xbeeQueue.size() >= 512)                                            // limit queue size
     {
-        xbeeQueue.pop();
+        xbeeQueue = {};
     }
 
     xbee.read((void*)&xbeeBuf, sizeof(xbeeBuf));
@@ -76,16 +84,16 @@ void xbeeISR()
 
 void buildFrame(CANFrame *tempFrame)
 {
-    if (tempFrame->syncWord == 0xA55A && validateChecksum(tempFrame)) // got a valid frame
+    if (tempFrame->syncWord == 0xA55A && validateChecksum(tempFrame))       // got a valid frame
     {
-        outmsg.id = tempFrame->id;                               // build an Mbed CAN frame and send it
+        outmsg.id = tempFrame->id;                                          // build an Mbed CAN frame and send it
         outmsg.len = tempFrame->dlc;
-        memcpy(outmsg.data, tempFrame->data, tempFrame->dlc); 
-        
+        memcpy(outmsg.data, tempFrame->data, tempFrame->dlc);
+
         if (tempFrame->extended)
         {
             outmsg.format = CANExtended;
-        } 
+        }
         else
         {
             outmsg.format = CANStandard;
